@@ -1,0 +1,63 @@
+﻿{
+    "manifest_version": 3,
+    "name": "Shikimori Plus",
+    "version": "2.4.4",
+    "description": "Интегрированный плеер, кнопки и 4K бейджи для Shikimori и Yanima",
+    "icons": {
+        "128": "icons/icon128.png"
+    },
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "icons/Rutraker.png",
+                "icons/Nyaa.png"
+            ],
+            "matches": [
+                "*://shikimori.one/*",
+                "*://shikimori.io/*",
+                "*://shiki.one/*"
+            ]
+        }
+    ],
+    "permissions": [
+        "storage",
+        "alarms"
+    ],
+    "host_permissions": [
+        "*://shikimori.one/*",
+        "*://shikimori.io/*",
+        "*://shiki.one/*",
+        "*://yanima.space/*",
+        "*://kodikapi.com/*",
+        "*://smotret-anime.com/*",
+        "https://docs.google.com/spreadsheets/*"
+    ],
+    "action": {
+        "default_popup": "popup.html",
+        "default_title": "Shikimori Plus"
+    },
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "*://shikimori.one/*",
+                "*://shikimori.io/*",
+                "*://shiki.one/*",
+                "*://yanima.space/*"
+            ],
+            "js": [
+                "player.js",
+                "shikimori-buttons.js",
+                "badges/anime-page.js",
+                "badges/catalog.js",
+                "yanima-buttons.js",
+                "extra-features.js",
+                "copy-title.js",
+                "content.js"
+            ],
+            "run_at": "document_end"
+        }
+    ]
+}
