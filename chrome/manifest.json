@@ -1,0 +1,75 @@
+{
+    "manifest_version": 3,
+    "name": "Shikimori Plus",
+    "version": "2.5.1",
+    "description": "Интегрированный плеер, кнопки и 4K бейджи для Shikimori и Yanima",
+    "icons": {
+        "128": "icons/icon128.png"
+    },
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "icons/Rutraker.png",
+                "icons/Nyaa.png"
+            ],
+            "matches": [
+                "*://shikimori.one/*",
+                "*://shikimori.io/*",
+                "*://shiki.one/*"
+            ]
+        }
+    ],
+    "permissions": [
+        "storage",
+        "alarms"
+    ],
+    "host_permissions": [
+        "*://shikimori.one/*",
+        "*://shikimori.io/*",
+        "*://shiki.one/*",
+        "*://yanima.space/*",
+        "*://kodikapi.com/*",
+        "*://smotret-anime.com/*",
+        "https://docs.google.com/spreadsheets/*",
+        "*://anilibria.top/*",
+        "*://aniliberty.top/*"
+    ],
+    "action": {
+        "default_popup": "popup/popup.html",
+        "default_title": "Shikimori Plus"
+    },
+    "background": {
+        "service_worker": "background/background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "*://shikimori.one/*",
+                "*://shikimori.io/*",
+                "*://shiki.one/*",
+                "*://yanima.space/*"
+            ],
+            "js": [
+                "scripts/player/player.js",
+                "scripts/buttons/shikimori-buttons.js",
+                "scripts/badges/anime-page.js",
+                "scripts/badges/catalog.js",
+                "scripts/buttons/yanima-buttons.js",
+                "scripts/utils/extra-features.js",
+                "scripts/utils/copy-title.js",
+                "scripts/utils/content.js"
+            ],
+            "run_at": "document_end"
+        },
+        {
+            "matches": [
+                "*://anilibria.top/*",
+                "*://aniliberty.top/*"
+            ],
+            "js": [
+                "scripts/utils/anilibria-hevc-filter.js"
+            ],
+            "run_at": "document_end"
+        }
+    ]
+}

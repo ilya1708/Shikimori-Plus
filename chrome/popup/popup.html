@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shikimori Plus</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            width: 260px;
+            max-height: 580px;
+            background: #111827;
+            color: #f9fafb;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            padding: 12px;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #1f2937;
+        }
+
+        .header-icon {
+            font-size: 18px;
+        }
+
+        .header h1 {
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 10px;
+            color: #6b7280;
+            margin-top: 1px;
+        }
+
+        .refresh-btn {
+            display: block;
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 12px;
+            background: #374151;
+            color: #9ca3af;
+            border: 1px solid #4b5563;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: not-allowed;
+            transition: all 0.2s ease;
+            opacity: 0.6;
+            text-decoration: none;
+        }
+
+        .refresh-btn.active {
+            background: #4f46e5;
+            color: white;
+            border-color: #6366f1;
+            cursor: pointer;
+            opacity: 1;
+            box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
+        }
+
+        .refresh-btn.active:hover {
+            background: #4338ca;
+        }
+
+        .section-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 6px;
+        }
+
+        .switch-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 12px;
+            background: #1f2937;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #374151;
+        }
+
+        .switch-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .switch-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: #d1d5db;
+        }
+
+        /* Toggle Switch Styling */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 30px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #374151;
+            transition: .3s;
+            border-radius: 18px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 12px;
+            width: 12px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: #818cf8;
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(12px);
+        }
+
+        .library-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+
+        .library-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            padding: 6px 4px;
+            background: #1f2937;
+            border: 2px solid #374151;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .library-btn:hover {
+            border-color: #4b5563;
+            background: #27374d;
+        }
+
+        .library-btn.active {
+            border-color: #10b981;
+            background: #065f46;
+        }
+
+        .library-btn .icon {
+            font-size: 14px;
+        }
+
+        .library-btn .name {
+            font-size: 11px;
+            font-weight: 700;
+            color: #f9fafb;
+        }
+
+        .library-btn .desc {
+            font-size: 9px;
+            color: #9ca3af;
+            line-height: 1.2;
+        }
+
+        .library-btn.active .desc {
+            color: #6ee7b7;
+        }
+
+        .sync-info {
+            font-size: 10px;
+            color: #4b5563;
+            text-align: center;
+        }
+
+        .sync-info span {
+            color: #6b7280;
+        }
+
+        #status-msg {
+            font-size: 10px;
+            color: #10b981;
+            text-align: center;
+            margin-top: 4px;
+            min-height: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <span class="header-icon">🎌</span>
+        <div>
+            <h1>Shikimori Plus</h1>
+            <p>v2.5.1 Control Panel</p>
+        </div>
+    </div>
+
+    <button id="btn-refresh" class="refresh-btn">Обновить страницу</button>
+
+    <div class="section-label">Shikimori</div>
+    <div class="switch-group">
+        <div class="switch-item">
+            <span class="switch-label">Плеер Kodik</span>
+            <label class="switch">
+                <input type="checkbox" id="feature-player" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="switch-item">
+            <span class="switch-label">Копирование названия</span>
+            <label class="switch">
+                <input type="checkbox" id="feature-copy-title" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="switch-item">
+            <span class="switch-label">Кнопки на Shikimori</span>
+            <label class="switch">
+                <input type="checkbox" id="feature-shiki-buttons" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="switch-item">
+            <span class="switch-label">Копирование информации</span>
+            <label class="switch">
+                <input type="checkbox" id="feature-display-id" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="switch-item">
+            <span class="switch-label">Рейтинг MAL и Shikimori</span>
+            <label class="switch">
+                <input type="checkbox" id="feature-mal-rating" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="switch-item">
+            <span class="switch-label">Ссылки поиска</span>
+            <label class="switch">
+                <input type="checkbox" id="feature-search-links" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="section-label">Yanima</div>
+    <div class="switch-group">
+        <div class="switch-item">
+            <span class="switch-label">Кнопка на Yanima</span>
+            <label class="switch">
+                <input type="checkbox" id="feature-yanima-buttons" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="section-label">Anilibria / Aniliberty</div>
+    <div class="switch-group">
+        <div class="switch-item">
+            <span class="switch-label">Скрыть HEVC торренты</span>
+            <label class="switch">
+                <input type="checkbox" id="feature-hevc-filter" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="section-label">Библиотеки 4K</div>
+    <div class="library-grid">
+        <button class="library-btn" id="btn-ilya1708" data-lib="ilya1708">
+            <span class="icon">📋</span>
+            <span class="name">Библиотека ilya1708</span>
+        </button>
+        <button class="library-btn" id="btn-krnzhnr" data-lib="krnzhnr">
+            <span class="icon">🎬</span>
+            <span class="name">Библиотека krnzhnr</span>
+        </button>
+        <button class="library-btn" id="btn-yanima" data-lib="yanima">
+            <span class="icon">🌸</span>
+            <span class="name">Библиотека Yanima</span>
+        </button>
+    </div>
+
+    <div class="sync-info">Синхр.: <span id="last-sync">—</span></div>
+    <div id="status-msg"></div>
+
+    <script src="popup.js"></script>
+</body>
+
+</html>
